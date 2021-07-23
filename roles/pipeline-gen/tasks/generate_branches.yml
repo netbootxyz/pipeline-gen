@@ -1,0 +1,47 @@
+---
+- name: checkout repo
+  git:
+    repo: 'git@github.com:netbootxyz/{{ repo_name }}.git'
+    dest: "/opt/builders/{{ repo_name }}"
+    version: master
+
+- name: get all branch names
+  shell: "git branch -r | grep -v master | awk -F '/' {'print $2'}"
+  register: "repo_branches"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+
+- name: remove existing workflows from master
+  command: "git rm -r .github/workflows/*"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+
+- name: commit changes
+  command: "git commit -m 'Updating workflow automation'"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+  ignore_errors: true
+
+- include: generate_workflows.yml
+  with_items:
+  - "{{ repo_branches.stdout_lines }}"
+  loop_control:
+    loop_var: branch_name
+
+- name: checkout master
+  command: "git checkout master"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+  ignore_errors: true
+
+- name: apply stashed changes
+  command: "git stash apply"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+  ignore_errors: true
+
+- name: commit changes
+  command: "git commit --amend -m 'Updating workflow automation'"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+  ignore_errors: true

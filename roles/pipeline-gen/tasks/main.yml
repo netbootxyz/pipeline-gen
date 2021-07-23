@@ -1,0 +1,6 @@
+---
+  - include: generate_branches.yml
+    with_items:
+    - "{{ asset_repos }}"
+    loop_control:
+      loop_var: repo_name
