@@ -12,6 +12,8 @@ jobs:
       with:
         limit-access-to-actor: true
     - name: Run a multi-line script
+      env:
+        CI_TOKEN: ${{ secrets.CI_TOKEN }}
       run: |
         git config --global user.name netboot-ci
         git config --global user.email netboot-ci@netboot.xyz
