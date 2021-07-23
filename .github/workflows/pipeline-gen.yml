@@ -9,4 +9,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run a multi-line script
       run: |
+        git config --global user.name netboot-ci
+        git config --global user.email netboot-ci@netboot.xyz
         ansible-playbook -i inventory site.yml
