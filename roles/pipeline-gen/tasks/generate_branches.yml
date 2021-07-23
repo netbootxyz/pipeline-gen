@@ -1,7 +1,7 @@
 ---
 - name: checkout repo
   git:
-    repo: 'git@github.com:netbootxyz/{{ repo_name }}.git'
+    repo: 'https://github.com/netbootxyz/{{ repo_name }}.git'
     dest: "/opt/builders/{{ repo_name }}"
     version: master
 
