@@ -1,5 +1,8 @@
 ---
 
+- name: Set token
+  set_fact: CI_TOKEN="{{ lookup('env','CI_TOKEN') }}"
+
 - name: add changes
   shell: |
     git config --global user.name netboot-ci
@@ -91,7 +94,7 @@
   ignore_errors: true
 
 - name: push changes
-  command: "git push https://netboot-ci:{{ lookup('env','CI_TOKEN') }}@github.com/netbootxyz/{{ repo_name }} {{ branch_name }}"
+  command: "git push https://netboot-ci:{{ CI_TOKEN }}@github.com/netbootxyz/{{ repo_name }} {{ branch_name }}"
   args:
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
