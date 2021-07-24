@@ -28,6 +28,11 @@
   args:
     chdir: "/opt/builders/{{ repo_name }}"
 
+- name: ensure workflow directory is created
+  file:
+    path: "/opt/builders/{{ repo_name }}/.github/workflows/"
+    state: directory
+    
 - name: generate workflows
   template:
     src: '{{ repo_name }}.yml.j2'
