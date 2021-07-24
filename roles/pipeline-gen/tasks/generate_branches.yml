@@ -41,6 +41,12 @@
   loop_control:
     loop_var: branch_name
 
+- name: add changes
+  command: "git add ."
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+  ignore_errors: true
+
 - name: commit changes
   command: "git commit -m 'Updating workflow automation'"
   args:
