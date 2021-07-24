@@ -1,4 +1,8 @@
 ---
+  - name: Set token
+    set_fact:
+      CI_USER_TOKEN: "{{ lookup('env','CI_TOKEN') }}"
+
   - include: generate_branches.yml
     with_items:
     - "{{ asset_repos }}"
