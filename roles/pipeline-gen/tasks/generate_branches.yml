@@ -1,4 +1,5 @@
 ---
+
 - name: checkout repo
   git:
     repo: 'https://github.com/netbootxyz/{{ repo_name }}.git'
@@ -33,14 +34,12 @@
   args:
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
-  
-- name: generate workflows
-  template:
-    src: '{{ repo_name }}.yml.j2'
-    dest: "/opt/builders/{{ repo_name }}/.github/workflows/{{ item }}.yml"
-    force: true
+
+- include: generate_master.yml
   with_items:
   - "{{ repo_branches.stdout_lines }}"
+  loop_control:
+    loop_var: branch_name
 
 - name: commit changes
   command: "git commit -m 'Updating workflow automation'"
