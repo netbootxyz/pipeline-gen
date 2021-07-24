@@ -32,7 +32,8 @@
   command: "git rm -r .github/workflows/*"
   args:
     chdir: "/opt/builders/{{ repo_name }}"
-
+  ignore_errors: true
+  
 - name: generate workflows
   template:
     src: '{{ repo_name }}.yml.j2'
