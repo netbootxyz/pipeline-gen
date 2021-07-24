@@ -39,6 +39,17 @@
     dest: "/opt/builders/{{ repo_name }}/.github/workflows/{{ branch_name }}.yml"
     force: true
 
+- name: ensure workflow directory is created
+  file:
+    path: "/opt/builders/{{ repo_name }}_master/.github/workflows/"
+    state: directory
+
+- name: generate workflow for master
+  template:
+    src: '{{ repo_name }}.yml.j2'
+    dest: "/opt/builders/{{ repo_name }}_master/.github/workflows/{{ branch_name }}.yml"
+    force: true
+
 - name: add changes
   command: "git add ."
   args:
