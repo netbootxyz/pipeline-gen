@@ -1,7 +1,0 @@
----
-
-- name: generate workflow
-  template:
-    src: '{{ repo_name }}.yml.j2'
-    dest: "/opt/builders/{{ repo_name }}/.github/workflows/{{ branch_name }}.yml"
-    force: true

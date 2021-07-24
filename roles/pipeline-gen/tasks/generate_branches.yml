@@ -28,23 +28,12 @@
   file:
     path: "/opt/builders/{{ repo_name }}/.github/workflows/"
     state: directory
-    
-- name: remove existing workflows from master
-  command: "git rm -r .github/workflows/*"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
 
-- name: ensure workflow directory is created
-  file:
-    path: "/opt/builders/{{ repo_name }}/.github/workflows/"
-    state: directory
-    
-- include: generate_master.yml
-  with_items:
-  - "{{ repo_branches.stdout_lines }}"
-  loop_control:
-    loop_var: branch_name
+- name: copy workflows to master
+  synchronize:
+    src: "/opt/builders/{{ repo_name }}_master/.github/workflows/"
+    dest: "/opt/builders/{{ repo_name }}/.github/workflows/"
+    delete: yes
 
 - name: add changes
   command: "git add ."
