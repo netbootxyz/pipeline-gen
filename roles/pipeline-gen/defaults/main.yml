@@ -1,4 +1,8 @@
 ---
 asset_repos:
 - asset-mirror
+- debian-squash
+- external-versions
+- fedora-assets
+- manjaro-squash
 - ubuntu-squash

@@ -11,35 +11,10 @@
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
 
-  #- name: check if travis exists
-  #  stat:
-  #    path: /opt/builders/{{ repo_name }}/.travis.yml
-  #  register:
-  #    travis_exists
-
 - name: check if github workflows exists
   stat:
     path: /opt/builders/{{ repo_name }}/.github/workflows/{{ branch_name }}.yml
   register: workflows_exists
-
-#- name: retrieve EXTERNAL_VERSION from .travis
-#  shell: "cat .travis.yml  | grep -i 'export EXTERNAL_VERSION' | awk -F'EXTERNAL_VERSION=' {'print $2'}"
-#  when: travis_exists.stat.exists
-#  register: external_version_curl
-#  args:
-#    chdir: "/opt/builders/{{ repo_name }}"
-
-#- name: retrieve BUILD_TYPE from .travis
-#  shell: "cat .travis.yml | grep -i 'BUILD_TYPE=' | awk -F'=' {'print $2'} | sed 's/\"//g'"
-#  when: travis_exists.stat.exists
-#  register: build_type
-#  args:
-#    chdir: "/opt/builders/{{ repo_name }}"
-
-#- name: Set build_type fact
-#  set_fact: 
-#    build_type_var: "{{ build_type.stdout }}"
-#  when: travis_exists.stat.exists
 
 - name: retrieve BUILD_TYPE from .github/workflows
   shell: "cat .github/workflows/{{ branch_name }}.yml | grep -i 'BUILD_TYPE:' | awk -F': ' {'print $2'}"
@@ -52,14 +27,6 @@
   set_fact: 
     build_type_var: "{{ build_type.stdout }}"
   when: workflows_exists.stat.exists
-  
-    #- name: generate version.sh file
-    #  template:
-    #    src: 'version.sh.j2'
-    #    dest: "/opt/builders/{{ repo_name }}/version.sh"
-    #    mode: a+x
-    #    force: true
-    #  when: travis_exists.stat.exists
 
 - name: ensure workflow directory is created
   file:
@@ -77,12 +44,6 @@
   args:
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
-
-  #- name: remove .travis.yml
-  #  command: "git rm .travis.yml"
-  #  args:
-  #   chdir: "/opt/builders/{{ repo_name }}"
-  # ignore_errors: true
 
 - name: commit changes
   command: "git commit -m 'Updating workflow automation'"
@@ -102,12 +63,6 @@
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
  
-- name: stash changes
-  command: "git stash apply"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
-
 - name: stash changes
   command: "git stash apply"
   args:
