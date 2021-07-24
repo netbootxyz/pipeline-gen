@@ -35,6 +35,11 @@
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
 
+- name: ensure workflow directory is created
+  file:
+    path: "/opt/builders/{{ repo_name }}/.github/workflows/"
+    state: directory
+    
 - include: generate_master.yml
   with_items:
   - "{{ repo_branches.stdout_lines }}"
