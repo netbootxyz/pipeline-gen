@@ -23,16 +23,16 @@
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
 
-- name: remove existing workflows from master
-  command: "git rm -r .github/workflows/*"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-
 - name: ensure workflow directory is created
   file:
     path: "/opt/builders/{{ repo_name }}/.github/workflows/"
     state: directory
     
+- name: remove existing workflows from master
+  command: "git rm -r .github/workflows/*"
+  args:
+    chdir: "/opt/builders/{{ repo_name }}"
+
 - name: generate workflows
   template:
     src: '{{ repo_name }}.yml.j2'
