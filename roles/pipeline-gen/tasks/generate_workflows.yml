@@ -1,9 +1,5 @@
 ---
 
-- name: Set token
-  set_fact:
-    CI_USER_TOKEN: "{{ lookup('env','CI_TOKEN') }}"
-
 - name: add changes
   shell: |
     git config --global user.name netboot-ci
