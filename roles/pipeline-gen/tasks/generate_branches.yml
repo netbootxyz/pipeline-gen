@@ -11,17 +11,6 @@
   args:
     chdir: "/opt/builders/{{ repo_name }}"
 
-- name: remove existing workflows from master
-  command: "git rm -r .github/workflows/*"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-
-- name: commit changes
-  command: "git commit -m 'Updating workflow automation'"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
-
 - include: generate_workflows.yml
   with_items:
   - "{{ repo_branches.stdout_lines }}"
@@ -34,14 +23,21 @@
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
 
-- name: apply stashed changes
-  command: "git stash apply"
+- name: remove existing workflows from master
+  command: "git rm -r .github/workflows/*"
   args:
     chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
+
+- name: generate workflows
+  template:
+    src: '{{ repo_name }}.yml.j2'
+    dest: "/opt/builders/{{ repo_name }}/.github/workflows/{{ item }}.yml"
+    force: true
+  with_items:
+  - "{{ repo_branches.stdout_lines }}"
 
 - name: commit changes
-  command: "git commit --amend -m 'Updating workflow automation'"
+  command: "git commit -m 'Updating workflow automation'"
   args:
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true

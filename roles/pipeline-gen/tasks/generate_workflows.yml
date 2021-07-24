@@ -16,18 +16,6 @@
     path: /opt/builders/{{ repo_name }}/.github/workflows/{{ branch_name }}.yml
   register: workflows_exists
 
-- name: retrieve BUILD_TYPE from .github/workflows
-  shell: "cat .github/workflows/{{ branch_name }}.yml | grep -i 'BUILD_TYPE:' | awk -F': ' {'print $2'}"
-  when: workflows_exists.stat.exists
-  register: build_type
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-
-- name: Set build_type fact
-  set_fact: 
-    build_type_var: "{{ build_type.stdout }}"
-  when: workflows_exists.stat.exists
-
 - name: ensure workflow directory is created
   file:
     path: "/opt/builders/{{ repo_name }}/.github/workflows/"
@@ -53,41 +41,6 @@
 
 - name: push changes
   command: "git push https://netboot-ci:{{ CI_USER_TOKEN }}@github.com/netbootxyz/{{ repo_name }} {{ branch_name }}"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
-                    
-- name: checkout master
-  command: "git checkout master"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
- 
-- name: stash changes
-  command: "git stash apply"
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
-
-- name: ensure workflow directory is created
-  file:
-    path: "/opt/builders/{{ repo_name }}/.github/workflows/"
-    state: directory
-
-- name: generate workflows
-  template:
-    src: '{{ repo_name }}.yml.j2'
-    dest: "/opt/builders/{{ repo_name }}/.github/workflows/{{ branch_name }}.yml"
-    force: true
-
-- name: add changes
-  command: "git add ."
-  args:
-    chdir: "/opt/builders/{{ repo_name }}"
-  ignore_errors: true
-
-- name: stash changes
-  command: "git stash"
   args:
     chdir: "/opt/builders/{{ repo_name }}"
   ignore_errors: true
