@@ -16,7 +16,7 @@
     path: /opt/builders/{{ repo_name }}/.github/workflows/{{ branch_name }}.yml
   register: workflows_exists
 
-  - name: retrieve BUILD_TYPE from .github/workflows
+- name: retrieve BUILD_TYPE from .github/workflows
   shell: "cat .github/workflows/{{ branch_name }}.yml | grep -i 'BUILD_TYPE:' | awk -F': ' {'print $2'}"
   when: workflows_exists.stat.exists
   register: build_type
