@@ -1,6 +1,9 @@
-name: Update pipeline-status
+name: Run pipeline generator
 
-on: push
+on:
+  workflow_dispatch:
+  schedule:
+    - '0 0 * * *'
 
 jobs:
   build:
