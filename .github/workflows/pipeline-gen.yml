@@ -18,4 +18,4 @@ jobs:
       run: |
         git config --global user.name netboot-ci
         git config --global user.email netboot-ci@netboot.xyz
-        ansible-playbook -i inventory site.yml
+        ansible-playbook -vvv -i inventory site.yml
