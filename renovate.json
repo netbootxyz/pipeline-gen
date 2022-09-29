@@ -1,9 +1,10 @@
 {
-  "extends": [
-    "config:base"
-  ],
-  "github-actions": 
-    "fileMatch": [
-      "\/roles/pipeline-gen\/templates\/[^/]+\.ya?ml.j2$"
-    ]
+   "extends":[
+      "config:base"
+   ],
+   "github-actions":{
+      "fileMatch":[
+         "\/roles\/pipeline-gen\/templates\/[^/]+\\.ya?ml.j2$"
+      ]
+   }
 }
