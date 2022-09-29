@@ -4,7 +4,7 @@
    ],
    "github-actions":{
       "fileMatch":[
-         "\/roles\/pipeline-gen\/templates\/[^/]+\\.ya?ml.j2$"
+         "^roles\/pipeline-gen\/templates\/.*.yml.j2$"
       ]
    }
 }
