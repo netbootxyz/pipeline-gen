@@ -8,12 +8,13 @@ on:
       - '.github/workflows/**'
   schedule:
     - cron: '0 4 * * 5'
+  workflow_dispatch:
 
 env:
   BRANCH: {{ branch_name }}
   GITHUB_ENDPOINT: netbootxyz/debian-squash
   DISCORD_HOOK_URL: ${{ '{{' }} secrets.DISCORD_HOOK_URL {{ '}}' }}
-  BUILD_TYPE: {{ build_type.stdout }}
+  BUILD_TYPE: {{ build_type_var }}
   DEBIAN_FRONTEND: noninteractive
   CI_TOKEN: ${{ '{{' }} secrets.CI_TOKEN {{ '}}' }}
 
@@ -52,7 +53,7 @@ jobs:
 
     - name: Generate Release Notes
       run: |
-        echo "Release generated for Branch: **$${{ '{{' }} env.BRANCH {{ '}}' }}**" > ${{ '{{' }} github.workspace {{ '}}' }}-CHANGELOG.txt
+        echo "Release generated for Branch: **${{ '{{' }} env.BRANCH {{ '}}' }}**" > ${{ '{{' }} github.workspace {{ '}}' }}-CHANGELOG.txt
 
     - name: Create release and upload assets
       if: steps.compare.outcome == 'success' && steps.compare.conclusion == 'success'
