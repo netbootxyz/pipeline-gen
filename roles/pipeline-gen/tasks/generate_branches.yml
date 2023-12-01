@@ -12,7 +12,7 @@
   args:
     chdir: "/opt/builders/{{ repo_name }}"
 
-- include: generate_workflows.yml
+- include_tasks: generate_workflows.yml
   with_items:
   - "{{ repo_branches.stdout_lines }}"
   loop_control:
